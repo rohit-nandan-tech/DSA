@@ -1,29 +1,27 @@
 class Solution {
 public:
- 
-    int canBeTypedWords(string s, string brokenLetters) {
-        unordered_set<char>st;
-
-        for(auto c: brokenLetters){
-            st.insert(c);
+    int canBeTypedWords(string text, string brokenLetters) {
+        // mark broken letters in a boolean array
+        vector<bool> broken(26, false);
+        for (char c : brokenLetters) {
+            broken[c - 'a'] = true;
         }
 
-        bool canTake = true;
-        int cnt = 0;
+        int count = 0;
+        bool canType = true;
 
-        for(int i = 0 ; i<s.size();i++){
-            if((st.find(s[i]) != st.end())){
-                canTake = false;
+        for (char c : text) {
+            if (c == ' ') {
+                if (canType) count++;
+                canType = true; // reset for next word
+            } else if (broken[c - 'a']) {
+                canType = false;
             }
-
-            if(s[i] == ' ' || i ==s.size() - 1){
-                if(canTake) cnt++;
-                else canTake = true;
-            }
-            
         }
 
-        return cnt;
-        
+        // handle last word
+        if (canType) count++;
+
+        return count;
     }
 };
