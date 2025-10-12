@@ -1,22 +1,28 @@
 class Solution {
 public:
+
+    int solve(int idx, vector<int>&dp, vector<int>&nums, int &k){
+        if(idx >= nums.size()) return 0;
+
+        if(dp[idx] != -1) return dp[idx];
+
+        int inc = nums[idx] + solve(idx + k, dp, nums, k);
+
+        return dp[idx] = inc;
+    }
     int maximumEnergy(vector<int>& energy, int k) {
         int n = energy.size();
-        vector<long long> dp(n, 0);
 
-        // Peeche se bharo dp (kyunki dp[i] depends on dp[i+k])
-        for (int i = n - 1; i >= 0; i--) {
-            dp[i] = energy[i];
-            if (i + k < n) {
-                dp[i] += dp[i + k]; // jump wala add kar do
-            }
+        vector<int>dp(n, -1);
+
+        int ans = INT_MIN;
+        for(int i = 0 ; i < n;i++){
+            ans = max(ans,solve(i, dp, energy, k));
         }
 
-        // Ab sabme se max energy choose karo
-        long long ans = LLONG_MIN;
-        for (int i = 0; i < n; i++) {
-            ans = max(ans, dp[i]);
-        }
+        
+
+
 
         return ans;
     }
